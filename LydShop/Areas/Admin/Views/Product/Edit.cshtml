@@ -1,0 +1,139 @@
+@model LydShop.Models.Product
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+}
+
+<div class="container py-4 animate-fade-in" style="max-width: 850px;">
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-600">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 rounded-4 glass-card">
+        <div class="card-body">
+            <h3 class="fw-800 text-light-dark mb-1">Chỉnh Sửa Sản Phẩm</h3>
+            <p class="text-muted mb-4">Cập nhật thông tin chi tiết của sản phẩm</p>
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="needs-validation">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ImageUrl" />
+                <input type="hidden" asp-for="CreatedAt" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 glass-alert rounded-3 mb-4" role="alert"></div>
+
+                <div class="row g-3">
+                    <!-- Product Name -->
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label text-muted fw-600 fs-7">Tên sản phẩm</label>
+                            <input asp-for="Name" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Nhập tên giày..." required />
+                            <span asp-validation-for="Name" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label asp-for="CategoryId" class="form-label text-muted fw-600 fs-7">Danh mục</label>
+                            <select asp-for="CategoryId" class="form-select bg-light border-0 py-2.5 shadow-none text-dark fs-7" asp-items="ViewBag.Categories" required>
+                                <option value="">Chọn danh mục</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Brand -->
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label asp-for="Brand" class="form-label text-muted fw-600 fs-7">Thương hiệu (Hãng)</label>
+                            <input asp-for="Brand" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Nike, Adidas, Jordan..." required />
+                            <span asp-validation-for="Brand" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label text-muted fw-600 fs-7">Giá gốc (VND)</label>
+                            <input asp-for="Price" type="number" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Giá gốc..." required />
+                            <span asp-validation-for="Price" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Sale Price -->
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label asp-for="SalePrice" class="form-label text-muted fw-600 fs-7">Giá khuyến mãi (Không bắt buộc)</label>
+                            <input asp-for="SalePrice" type="number" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Để trống nếu không giảm giá" />
+                            <span asp-validation-for="SalePrice" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label asp-for="Stock" class="form-label text-muted fw-600 fs-7">Số lượng trong kho</label>
+                            <input asp-for="Stock" type="number" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Ví dụ: 50" required />
+                            <span asp-validation-for="Stock" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Current & New Image -->
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label text-muted fw-600 fs-7">Thay đổi hình ảnh sản phẩm</label>
+                            <input type="file" name="imageFile" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" accept="image/*" />
+                            <small class="text-muted d-block mt-1">Để trống nếu muốn giữ nguyên ảnh hiện tại.</small>
+                        </div>
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <label class="form-label text-muted fw-600 fs-7 d-block">Ảnh hiện tại</label>
+                                <img src="@Model.ImageUrl" class="rounded-3 border" style="max-height: 80px; max-width: 100%; object-fit: cover;" />
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label text-muted fw-600 fs-7">Mô tả sản phẩm</label>
+                            <textarea asp-for="Description" rows="5" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Nhập mô tả sản phẩm..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger fs-7 mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Active and Featured Checkboxes -->
+                    <div class="col-md-6">
+                        <div class="form-check form-switch py-2">
+                            <input asp-for="IsActive" class="form-check-input accent-primary" type="checkbox" />
+                            <label asp-for="IsActive" class="form-check-label text-muted fw-600 fs-7 ms-2">Kích hoạt sản phẩm này (Active)</label>
+                        </div>
+                        <span asp-validation-for="IsActive" class="text-danger fs-7 mt-1 d-block"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-check form-switch py-2">
+                            <input asp-for="IsFeatured" class="form-check-input accent-primary" type="checkbox" />
+                            <label asp-for="IsFeatured" class="form-check-label text-muted fw-600 fs-7 ms-2">Đánh dấu là Sản phẩm Nổi bật (Featured)</label>
+                        </div>
+                        <span asp-validation-for="IsFeatured" class="text-danger fs-7 mt-1 d-block"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-600 shadow-sm-primary btn-hover-scale mt-4">
+                    Lưu các thay đổi <i class="fas fa-save ms-2"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

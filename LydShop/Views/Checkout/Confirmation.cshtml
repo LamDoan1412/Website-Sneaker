@@ -1,0 +1,123 @@
+@* Views/Checkout/Confirmation.cshtml *@
+@model LydShop.Models.Order
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+@section Styles {
+<style>
+.confirm-page { max-width: 660px; margin: 70px auto; padding: 0 24px 60px; text-align: center; }
+.confirm-icon { font-size: 72px; margin-bottom: 20px; animation: pop .4s ease; }
+@@keyframes pop { 0%{transform:scale(.5);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+.confirm-title { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+.confirm-sub { color: #aaa; font-size: 14px; margin-bottom: 6px; }
+.order-num { font-size: 1.2rem; font-weight: 800; color: #e8500a; margin-bottom: 32px; }
+
+.confirm-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #ede9e2;
+    padding: 24px 28px;
+    text-align: left;
+    margin-bottom: 24px;
+}
+.info-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-label { color: #aaa; }
+.info-val { font-weight: 600; text-align: right; max-width: 60%; }
+.info-row.total { font-size: 17px; font-weight: 800; border-top: 1px solid #f5f2ee; padding-top: 14px; margin-top: 6px; }
+.info-row.total .info-val { color: #e8500a; }
+
+.products-list { margin-top: 16px; border-top: 1px solid #f5f2ee; padding-top: 16px; }
+.p-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.p-thumb { width: 52px; height: 52px; border-radius: 8px; overflow: hidden; background: #f5f2ee; flex-shrink: 0; }
+.p-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.p-name { font-size: 13px; font-weight: 600; }
+.p-meta { font-size: 11px; color: #aaa; }
+.p-price { margin-left: auto; font-weight: 700; color: #e8500a; font-size: 13px; white-space: nowrap; }
+
+.action-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary-c {
+    background: #111; color: white;
+    padding: 12px 28px; border-radius: 10px;
+    text-decoration: none; font-weight: 700; font-size: 14px;
+    transition: background .18s;
+}
+.btn-primary-c:hover { background: #e8500a; color: white; }
+.btn-ghost-c {
+    background: white; color: #111;
+    padding: 12px 28px; border-radius: 10px;
+    text-decoration: none; font-weight: 600; font-size: 14px;
+    border: 1.5px solid #e8e4de;
+    transition: border-color .18s;
+}
+.btn-ghost-c:hover { border-color: #e8500a; color: #e8500a; }
+</style>
+}
+
+<div class="confirm-page">
+    <div class="confirm-icon">🎉</div>
+    <h1 class="confirm-title">Đặt hàng thành công!</h1>
+    <p class="confirm-sub">Cảm ơn bạn đã mua hàng tại LydShop</p>
+    <div class="order-num">Mã đơn hàng: #@Model.Id</div>
+
+    <div class="confirm-card">
+        <div class="info-row">
+            <span class="info-label">Ngày đặt</span>
+            <span class="info-val">@Model.CreatedAt.ToString("HH:mm — dd/MM/yyyy")</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Giao đến</span>
+            <span class="info-val">@Model.ShippingAddress</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Người nhận</span>
+            <span class="info-val">@Model.ReceiverName · @Model.ReceiverPhone</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Thanh toán</span>
+            <span class="info-val">
+                @(Model.PaymentMethod == LydShop.Models.PaymentMethod.COD
+                    ? "Thanh toán khi nhận hàng"
+                    : "Chuyển khoản ngân hàng")
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Trạng thái</span>
+            <span class="info-val" style="color:#f59e0b;font-weight:700">⏳ Chờ xác nhận</span>
+        </div>
+
+        <!-- Products -->
+        <div class="products-list">
+            @foreach (var d in Model.OrderDetails)
+            {
+                <div class="p-row">
+                    <div class="p-thumb">
+                        <img src="@(d.Product?.ImageUrl ?? "/images/no-image.png")"
+                             alt="@d.Product?.Name" />
+                    </div>
+                    <div>
+                        <div class="p-name">@d.Product?.Name</div>
+                        <div class="p-meta">
+                            @if (!string.IsNullOrEmpty(d.Size)) { <text>Size @d.Size</text> }
+                            · SL: @d.Quantity
+                        </div>
+                    </div>
+                    <div class="p-price">@((d.UnitPrice * d.Quantity).ToString("N0")) ₫</div>
+                </div>
+            }
+        </div>
+
+        <div class="info-row total">
+            <span>Tổng cộng</span>
+            <span class="info-val">@Model.TotalAmount.ToString("N0") ₫</span>
+        </div>
+    </div>
+
+    <div class="action-btns">
+        <a asp-controller="Order" asp-action="Detail" asp-route-id="@Model.Id"
+           class="btn-primary-c">Xem đơn hàng</a>
+        <a asp-controller="Shop" asp-action="Index"
+           class="btn-ghost-c">Tiếp tục mua sắm</a>
+    </div>
+</div>

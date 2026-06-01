@@ -1,0 +1,118 @@
+@model List<LydShop.Models.ApplicationUser>
+@inject Microsoft.AspNetCore.Identity.UserManager<LydShop.Models.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Header -->
+    <div class="mb-4">
+        <h1 class="fw-800 text-light-dark h3 mb-1">Quản lý Tài Khoản</h1>
+        <p class="text-muted fs-7 mb-0">Xem và phân quyền các tài khoản người dùng trong hệ thống</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="card border-0 shadow-sm p-3 rounded-4 glass-card mb-4">
+        <form asp-action="Index" method="get" class="row g-2 align-items-center">
+            <div class="col-md-9">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 text-muted"><i class="fas fa-search"></i></span>
+                    <input type="text" name="search" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Tìm theo Họ tên, Email..." value="@ViewBag.Search" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100 py-2.5 rounded-3 fw-600 shadow-sm-primary btn-hover-scale fs-7">
+                    Tìm kiếm <i class="fas fa-search ms-1 fs-8"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card border-0 shadow-sm p-4 rounded-4 glass-card">
+        <div class="table-responsive">
+            <table class="table align-middle custom-table mb-0 fs-7">
+                <thead>
+                    <tr class="text-muted border-bottom border-light-subtle fw-600">
+                        <th scope="col">Tên người dùng</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Số điện thoại</th>
+                        <th scope="col" class="text-center">Vai trò</th>
+                        <th scope="col" class="text-center">Trạng thái</th>
+                        <th scope="col" class="text-center" style="width: 120px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Không tìm thấy tài khoản người dùng nào.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var user in Model)
+                        {
+                            var roles = await UserManager.GetRolesAsync(user);
+                            var isAdmin = roles.Contains("Admin");
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="profile-avatar bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-700" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                                            @(string.IsNullOrEmpty(user.FullName) ? "U" : user.FullName[0].ToString().ToUpper())
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-700 text-dark mb-0">@user.FullName</h6>
+                                            <small class="text-muted">Username: @user.UserName</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td class="text-muted">@(string.IsNullOrEmpty(user.Phone) ? "Chưa cung cấp" : user.Phone)</td>
+                                <td class="text-center">
+                                    @if (isAdmin)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill fs-8 fw-700">
+                                            <i class="fas fa-user-shield me-1"></i>Admin
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1.5 rounded-pill fs-8">
+                                            <i class="fas fa-user me-1"></i>User
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái hoạt động của tài khoản này?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="border-0 bg-transparent p-0 shadow-none">
+                                            @if (user.IsActive)
+                                            {
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill cursor-pointer" title="Nhấp để khóa tài khoản">
+                                                    Đang hoạt động
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 rounded-pill cursor-pointer" title="Nhấp để kích hoạt tài khoản">
+                                                    Đang khóa
+                                                </span>
+                                            }
+                                        </button>
+                                    </form>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Detail" asp-route-id="@user.Id" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-600 btn-hover-scale">
+                                        Chi tiết <i class="fas fa-chevron-right ms-1 fs-8"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,170 @@
+@* Views/Order/Detail.cshtml *@
+@model LydShop.Models.Order
+@{
+    ViewData["Title"] = $"Đơn hàng #{Model.Id}";
+}
+
+@section Styles {
+<style>
+.detail-page { max-width: 800px; margin: 40px auto; padding: 0 40px 60px; }
+.back-link { color: #aaa; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; transition: color .15s; }
+.back-link:hover { color: #e8500a; }
+.detail-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; }
+.detail-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+.detail-title span { color: #e8500a; }
+
+.status-badge { font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; }
+.st-Pending    { background: #fff8e1; color: #f59e0b; }
+.st-Confirmed  { background: #e8f4ff; color: #3b82f6; }
+.st-Shipping   { background: #f3e8ff; color: #8b5cf6; }
+.st-Delivered  { background: #f0fff4; color: #22c55e; }
+.st-Cancelled  { background: #fff0f0; color: #ef4444; }
+
+.info-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #ede9e2;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+}
+.info-card h5 { font-size: 14px; font-weight: 800; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f5f2ee; }
+.info-row { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 10px; }
+.info-label { color: #aaa; }
+.info-val { font-weight: 600; text-align: right; max-width: 65%; }
+
+.product-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f5f2ee;
+}
+.product-row:last-child { border-bottom: none; }
+.prod-thumb { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; background: #f5f2ee; flex-shrink: 0; }
+.prod-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.prod-name { font-size: 14px; font-weight: 700; color: #111; }
+.prod-meta { font-size: 12px; color: #aaa; margin-top: 3px; }
+.prod-price { margin-left: auto; font-weight: 700; color: #e8500a; font-size: 14px; white-space: nowrap; }
+
+.sum-row { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 10px; color: #666; }
+.sum-row.total { font-size: 17px; font-weight: 800; color: #111; border-top: 1px solid #f0ede8; padding-top: 12px; margin-top: 6px; }
+.sum-row.total span:last-child { color: #e8500a; }
+
+.btn-cancel {
+    background: #fff0f0; color: #ef4444;
+    border: 1.5px solid #fca5a5;
+    padding: 10px 24px; border-radius: 9px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px; font-weight: 700;
+    cursor: pointer; transition: all .18s;
+}
+.btn-cancel:hover { background: #fee2e2; border-color: #ef4444; }
+
+@@media (max-width: 600px) { .detail-page { padding: 0 16px 40px; } .detail-head { flex-direction: column; gap: 12px; } }
+</style>
+}
+
+<div class="detail-page">
+    <a asp-action="History" class="back-link">
+        <i class="fas fa-arrow-left"></i> Lịch sử đơn hàng
+    </a>
+
+    <div class="detail-head">
+        <div>
+            <h1 class="detail-title">
+                Đơn hàng <span>#@Model.Id</span>
+            </h1>
+            <div style="font-size:13px;color:#aaa;margin-top:4px">
+                @Model.CreatedAt.ToString("HH:mm — dd/MM/yyyy")
+            </div>
+        </div>
+        <span class="status-badge st-@Model.Status">
+            @(Model.Status switch {
+                OrderStatus.Pending   => "⏳ Chờ xử lý",
+                OrderStatus.Confirmed => "✅ Đã xác nhận",
+                OrderStatus.Shipping  => "🚚 Đang giao",
+                OrderStatus.Delivered => "✓ Đã giao hàng",
+                OrderStatus.Cancelled => "✗ Đã huỷ",
+                _ => Model.Status.ToString()
+            })
+        </span>
+    </div>
+
+    <!-- Thông tin giao hàng -->
+    <div class="info-card">
+        <h5>📦 Thông tin giao hàng</h5>
+        <div class="info-row">
+            <span class="info-label">Người nhận</span>
+            <span class="info-val">@Model.ReceiverName</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Điện thoại</span>
+            <span class="info-val">@Model.ReceiverPhone</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Địa chỉ</span>
+            <span class="info-val">@Model.ShippingAddress</span>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Note))
+        {
+            <div class="info-row">
+                <span class="info-label">Ghi chú</span>
+                <span class="info-val">@Model.Note</span>
+            </div>
+        }
+        <div class="info-row">
+            <span class="info-label">Thanh toán</span>
+            <span class="info-val">
+                @(Model.PaymentMethod == LydShop.Models.PaymentMethod.COD
+                    ? "Thanh toán khi nhận hàng (COD)"
+                    : "Chuyển khoản ngân hàng")
+            </span>
+        </div>
+    </div>
+
+    <!-- Sản phẩm -->
+    <div class="info-card">
+        <h5>🛍️ Sản phẩm (@Model.OrderDetails.Count)</h5>
+        @foreach (var d in Model.OrderDetails)
+        {
+            <div class="product-row">
+                <div class="prod-thumb">
+                    <img src="@(d.Product?.ImageUrl ?? "/images/no-image.png")"
+                         alt="@d.Product?.Name" />
+                </div>
+                <div style="flex:1;min-width:0">
+                    <div class="prod-name">@d.Product?.Name</div>
+                    <div class="prod-meta">
+                        @if (!string.IsNullOrEmpty(d.Size)) { <text>Size @d.Size</text> }
+                        @if (!string.IsNullOrEmpty(d.Color)) { <text> · @d.Color</text> }
+                        · SL: @d.Quantity · @d.UnitPrice.ToString("N0") ₫/đôi
+                    </div>
+                </div>
+                <div class="prod-price">
+                    @((d.UnitPrice * d.Quantity).ToString("N0")) ₫
+                </div>
+            </div>
+        }
+
+        <div style="margin-top:16px">
+            <div class="sum-row">
+                <span>Tạm tính</span>
+                <span>@(Model.OrderDetails.Sum(d => d.UnitPrice * d.Quantity).ToString("N0")) ₫</span>
+            </div>
+            <div class="sum-row total">
+                <span>Tổng cộng</span>
+                <span>@Model.TotalAmount.ToString("N0") ₫</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Huỷ đơn (chỉ khi Pending) -->
+    @if (Model.Status == OrderStatus.Pending)
+    {
+        <form asp-action="Cancel" asp-route-id="@Model.Id" method="post"
+              onsubmit="return confirm('Bạn chắc chắn muốn huỷ đơn hàng #@Model.Id?')">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn-cancel">
+                <i class="fas fa-xmark"></i> Huỷ đơn hàng
+            </button>
+        </form>
+    }
+</div>

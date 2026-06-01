@@ -1,0 +1,115 @@
+@using Microsoft.CodeAnalysis.Differencing
+@* Views/Account/Login.cshtml *@
+@model LydShop.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+<style>
+.auth-wrap { min-height: calc(100vh - 62px); display: grid; grid-template-columns: 1fr 1fr; }
+.auth-left {
+    background: linear-gradient(145deg, #0c0c0c 0%, #1c0a00 100%);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 60px; color: white;
+}
+.auth-brand { font-size: 3.2rem; font-weight: 800; letter-spacing: -2px; }
+.auth-brand span { color: #e8500a; }
+.auth-tagline { font-size: 12px; color: #555; letter-spacing: 2px; margin-top: 8px; }
+.auth-right {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    background: #faf9f7;
+    overflow-y: auto;
+}
+.auth-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+.auth-sub { font-size: 13.5px; color: #aaa; margin-bottom: 30px; }
+.form-group { margin-bottom: 18px; }
+.form-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #aaa; margin-bottom: 8px; display: block; }
+.form-ctrl {
+    width: 100%; padding: 13px 16px;
+    border: 1.5px solid #e8e4de; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    background: white; outline: none;
+    transition: border-color .18s;
+}
+.form-ctrl:focus { border-color: #e8500a; }
+.remember-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666; margin-bottom: 20px; }
+.remember-row input { accent-color: #e8500a; width: 15px; height: 15px; }
+.btn-auth {
+    width: 100%; height: 52px;
+    background: #e8500a; color: white; border: none;
+    border-radius: 11px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: background .18s;
+}
+.btn-auth:hover { background: #ff6b2b; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: 13.5px; color: #aaa; }
+.auth-switch a { color: #e8500a; text-decoration: none; font-weight: 700; }
+.error-box {
+    background: #fff0f0; border: 1px solid #fca5a5;
+    color: #ef4444; padding: 11px 14px;
+    border-radius: 9px; font-size: 13px; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+}
+    
+}
+</style>
+}
+
+<div class="auth-wrap">
+    <div class="auth-left">
+        <div class="auth-brand">Lyd<span>Shop</span></div>
+        <div class="auth-tagline">GIÀY THỂ THAO CHÍNH HÃNG</div>
+        <div style="font-size:64px;margin:32px 0">👟</div>
+        <div style="font-size:13.5px;color:#444;text-align:center;max-width:240px;line-height:1.7">
+            Hơn 500+ mẫu giày từ Nike, Adidas, Puma và nhiều thương hiệu hàng đầu
+        </div>
+    </div>
+
+    <div class="auth-right">
+        <h2 class="auth-title">Đăng nhập</h2>
+        <p class="auth-sub">Chào mừng bạn quay lại LydShop!</p>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+        {
+            foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div class="error-box">
+                    <i class="fas fa-circle-exclamation"></i> @err.ErrorMessage
+                </div>
+            }
+        }
+
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-ctrl"
+                       placeholder="email@example.com" autocomplete="email" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <input asp-for="Password" class="form-ctrl"
+                       placeholder="••••••••" autocomplete="current-password" />
+            </div>
+            <div class="remember-row">
+                <input asp-for="RememberMe" type="checkbox" id="rememberMe" />
+                <label for="rememberMe">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <button type="submit" class="btn-auth">Đăng nhập →</button>
+        </form>
+
+        <div class="auth-switch" style="margin-top:16px">
+            Chưa có tài khoản?
+            <a asp-action="Register">Đăng ký ngay</a>
+        </div>
+    </div>
+</div>

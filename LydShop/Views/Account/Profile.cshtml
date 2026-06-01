@@ -1,0 +1,220 @@
+@* Views/Account/Profile.cshtml *@
+@model LydShop.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Hồ sơ của tôi";
+}
+
+@section Styles {
+<style>
+.profile-page { max-width: 960px; margin: 40px auto; padding: 0 24px 60px; }
+.profile-sidebar {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #ede9e2;
+    padding: 28px 24px;
+    text-align: center;
+    position: sticky;
+    top: 80px;
+}
+.profile-avatar-big {
+    width: 80px; height: 80px;
+    background: #e8500a;
+    color: white;
+    font-size: 2rem;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+}
+.profile-fullname { font-size: 17px; font-weight: 800; color: #111; margin-bottom: 4px; }
+.profile-email { font-size: 13px; color: #aaa; margin-bottom: 16px; }
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #666;
+    transition: all .15s;
+    margin-bottom: 4px;
+}
+.sidebar-nav-item:hover { background: #f5f2ee; color: #111; }
+.sidebar-nav-item.active { background: #fff3ee; color: #e8500a; font-weight: 600; }
+.sidebar-nav-item i { width: 16px; text-align: center; }
+
+.form-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #ede9e2;
+    padding: 28px;
+    margin-bottom: 20px;
+}
+.form-card h5 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+.form-card .sub { font-size: 13px; color: #aaa; margin-bottom: 24px; }
+.form-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 7px;
+}
+.form-control {
+    border: 1.5px solid #e8e4de;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: border-color .18s;
+}
+.form-control:focus { border-color: #e8500a; box-shadow: none; }
+.form-control:disabled { background: #faf9f7; color: #aaa; }
+.btn-save {
+    background: #e8500a;
+    color: white;
+    border: none;
+    padding: 11px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .18s;
+}
+.btn-save:hover { background: #ff6b2b; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+.stat-item {
+    background: #faf9f7;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+}
+.stat-num { font-size: 22px; font-weight: 800; color: #e8500a; }
+.stat-lbl { font-size: 11px; color: #aaa; margin-top: 3px; }
+</style>
+}
+
+<div class="profile-page">
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start">
+
+        <!-- SIDEBAR -->
+        <div class="profile-sidebar">
+            @{
+                var avatarChar = !string.IsNullOrEmpty(Model.FullName)
+                    ? Model.FullName[0].ToString().ToUpper()
+                    : (Model.Email?[0].ToString().ToUpper() ?? "U");
+            }
+            <div class="profile-avatar-big">@avatarChar</div>
+            <div class="profile-fullname">@(Model.FullName ?? "Chưa cập nhật")</div>
+            <div class="profile-email">@Model.Email</div>
+
+            <span class="badge rounded-pill px-3 py-2 mb-3"
+                  style="background:#fff3ee;color:#e8500a;font-size:12px;font-weight:600">
+                <i class="fas fa-user me-1"></i>Thành viên
+            </span>
+
+            <div style="text-align:left;margin-top:8px">
+                <a asp-action="Profile" class="sidebar-nav-item active">
+                    <i class="fas fa-user"></i> Thông tin cá nhân
+                </a>
+                <a asp-controller="Order" asp-action="History" class="sidebar-nav-item">
+                    <i class="fas fa-receipt"></i> Đơn hàng của tôi
+                </a>
+                <a asp-controller="Cart" asp-action="Index" class="sidebar-nav-item">
+                    <i class="fas fa-bag-shopping"></i> Giỏ hàng
+                </a>
+                <div style="height:1px;background:#f0ede8;margin:8px 0"></div>
+                <form asp-controller="Account" asp-action="Logout" method="post" style="margin:0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="sidebar-nav-item w-100 border-0 bg-transparent text-start"
+                            style="color:#f87171;cursor:pointer">
+                        <i class="fas fa-right-from-bracket"></i> Đăng xuất
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MAIN -->
+        <div>
+            <!-- Form cập nhật -->
+            <div class="form-card">
+                <h5>Thông tin cá nhân</h5>
+                <p class="sub">Cập nhật họ tên, số điện thoại và địa chỉ nhận hàng</p>
+
+                <form asp-action="Profile" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Họ và tên *</label>
+                            <input type="text" name="fullName" class="form-control"
+                                   value="@Model.FullName" required
+                                   placeholder="Nguyễn Văn A" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" name="phone" class="form-control"
+                                   value="@Model.Phone"
+                                   placeholder="0912 345 678" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Địa chỉ nhận hàng</label>
+                            <textarea name="address" class="form-control" rows="3"
+                                      placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố">@Model.Address</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Email (không thể thay đổi)</label>
+                            <input type="email" class="form-control"
+                                   value="@Model.Email" disabled />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save me-2"></i>Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Thông tin tài khoản -->
+            <div class="form-card">
+                <h5>Thông tin tài khoản</h5>
+                <p class="sub">Chi tiết tài khoản của bạn</p>
+                <div class="row g-3 fs-7">
+                    <div class="col-md-6">
+                        <span style="color:#aaa;display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">
+                            Email
+                        </span>
+                        <strong>@Model.Email</strong>
+                    </div>
+                    <div class="col-md-6">
+                        <span style="color:#aaa;display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">
+                            Xác minh email
+                        </span>
+                        <strong style="color:@(Model.EmailConfirmed ? "#22c55e" : "#f59e0b")">
+                            @(Model.EmailConfirmed ? "✓ Đã xác minh" : "Chưa xác minh")
+                        </strong>
+                    </div>
+                    <div class="col-md-6">
+                        <span style="color:#aaa;display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">
+                            Trạng thái
+                        </span>
+                        <strong style="color:@(Model.IsActive ? "#22c55e" : "#ef4444")">
+                            @(Model.IsActive ? "✓ Hoạt động" : "Đã bị khoá")
+                        </strong>
+                    </div>
+                    <div class="col-md-6">
+                        <span style="color:#aaa;display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">
+                            Địa chỉ hiện tại
+                        </span>
+                        <strong>@(string.IsNullOrEmpty(Model.Address) ? "Chưa cập nhật" : Model.Address)</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+@model LydShop.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Chi tiết tài khoản " + Model.FullName;
+    var roles = ViewBag.Roles as IList<string>;
+    var isAdmin = roles != null && roles.Contains("Admin");
+}
+
+<div class="container py-4 animate-fade-in" style="max-width: 800px;">
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-600">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 rounded-4 glass-card">
+        <div class="card-body">
+            <div class="d-flex align-items-center gap-4 mb-4 pb-3 border-bottom border-light-subtle flex-wrap">
+                <div class="profile-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-800 shadow-sm" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                    @Model.FullName?[0].ToString().ToUpper()
+                </div>
+                <div>
+                    <h3 class="fw-800 text-light-dark mb-1">@Model.FullName</h3>
+                    <p class="text-muted fs-7 mb-2"><i class="fas fa-envelope me-1"></i>@Model.Email</p>
+                    <div class="d-flex gap-2">
+                        @if (isAdmin)
+                        {
+                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-1.5 rounded-pill fs-8 fw-700">
+                                <i class="fas fa-user-shield me-1"></i>Quản trị viên (Admin)
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 rounded-pill fs-8">
+                                <i class="fas fa-user me-1"></i>Khách hàng (User)
+                            </span>
+                        }
+
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fs-8">
+                                Hoạt động
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1.5 rounded-pill fs-8">
+                                Đang khóa
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="fw-800 text-light-dark mb-3">Thông tin chi tiết tài khoản</h5>
+            
+            <div class="row g-3 fs-7 mb-4 bg-light p-3 rounded-4 bg-opacity-50">
+                <div class="col-sm-6">
+                    <span class="text-muted d-block">Mã tài khoản (User ID)</span>
+                    <strong class="text-dark">@Model.Id</strong>
+                </div>
+                <div class="col-sm-6">
+                    <span class="text-muted d-block">Tên tài khoản đăng nhập</span>
+                    <strong class="text-dark">@Model.UserName</strong>
+                </div>
+                <div class="col-sm-6">
+                    <span class="text-muted d-block">Số điện thoại liên hệ</span>
+                    <strong class="text-dark">@(string.IsNullOrEmpty(Model.Phone) ? "Chưa có" : Model.Phone)</strong>
+                </div>
+                <div class="col-sm-6">
+                    <span class="text-muted d-block">Xác minh Email</span>
+                    <strong class="text-dark">@(Model.EmailConfirmed ? "Đã xác minh" : "Chưa xác minh")</strong>
+                </div>
+                <div class="col-12">
+                    <span class="text-muted d-block">Địa chỉ mặc định</span>
+                    <strong class="text-dark">@(string.IsNullOrEmpty(Model.Address) ? "Chưa cung cấp" : Model.Address)</strong>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex gap-3 flex-wrap pt-3 border-top border-light-subtle">
+                <form asp-action="ToggleActive" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Bạn có chắc chắn?')">
+                    @Html.AntiForgeryToken()
+                    @if (Model.IsActive)
+                    {
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 py-2.5 fw-600 shadow-sm-danger btn-hover-scale">
+                            <i class="fas fa-lock me-2"></i>Khóa tài khoản
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-success rounded-pill px-4 py-2.5 fw-600 shadow-sm-success btn-hover-scale">
+                            <i class="fas fa-lock-open me-2"></i>Kích hoạt tài khoản
+                        </button>
+                    }
+                </form>
+
+                @if (!isAdmin)
+                {
+                    <form asp-action="MakeAdmin" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Cấp quyền Admin cho tài khoản này?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-warning rounded-pill px-4 py-2.5 fw-600 shadow-sm-warning btn-hover-scale text-dark">
+                            <i class="fas fa-user-shield me-2"></i>Cấp quyền Admin
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

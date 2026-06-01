@@ -1,0 +1,165 @@
+@using LydShop.Models
+@* Views/Order/History.cshtml *@
+@model List<LydShop.Models.Order>
+@{
+    ViewData["Title"] = "Lịch sử đơn hàng";
+}
+
+@section Styles {
+<style>
+.history-page { max-width: 900px; margin: 40px auto; padding: 0 40px 60px; }
+.page-title { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 28px; }
+
+/* TABS */
+.status-tabs { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+.status-tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1.5px solid #e8e4de;
+    background: white;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    color: #666;
+    transition: all .18s;
+}
+.status-tab:hover, .status-tab.active {
+    background: #111; border-color: #111; color: white;
+}
+
+/* ORDER CARD */
+.order-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #ede9e2;
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: box-shadow .18s;
+}
+.order-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.07); }
+.order-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f5f2ee;
+    background: #faf9f7;
+}
+.order-id { font-weight: 800; font-size: 15px; }
+.order-date { font-size: 12px; color: #aaa; margin-top: 2px; }
+.status-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px;
+    white-space: nowrap;
+}
+.st-Pending    { background: #fff8e1; color: #f59e0b; }
+.st-Confirmed  { background: #e8f4ff; color: #3b82f6; }
+.st-Shipping   { background: #f3e8ff; color: #8b5cf6; }
+.st-Delivered  { background: #f0fff4; color: #22c55e; }
+.st-Cancelled  { background: #fff0f0; color: #ef4444; }
+
+.order-card-body { padding: 16px 20px; }
+.order-items-preview {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 12px;
+}
+.preview-thumb {
+    width: 52px; height: 52px;
+    border-radius: 8px; overflow: hidden;
+    background: #f5f2ee; flex-shrink: 0;
+}
+.preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.preview-more {
+    width: 52px; height: 52px;
+    border-radius: 8px;
+    background: #f5f2ee;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #aaa;
+}
+.order-card-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid #f5f2ee;
+}
+.order-total { font-weight: 800; font-size: 16px; color: #e8500a; }
+.btn-detail {
+    background: none; border: 1.5px solid #e8e4de;
+    padding: 7px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: #444;
+    text-decoration: none; transition: all .18s;
+}
+.btn-detail:hover { border-color: #e8500a; color: #e8500a; }
+
+.empty-state { text-align: center; padding: 80px 20px; background: white; border-radius: 14px; }
+@@media (max-width: 600px) { .history-page { padding: 0 16px 40px; } }
+</style>
+}
+
+<div class="history-page">
+    <h1 class="page-title">Đơn hàng của tôi</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <div style="font-size:60px;margin-bottom:16px">📦</div>
+            <h4 style="font-weight:800;margin-bottom:8px">Chưa có đơn hàng</h4>
+            <p style="color:#aaa;margin-bottom:24px">Hãy bắt đầu mua sắm ngay!</p>
+            <a asp-controller="Shop" asp-action="Index"
+               style="background:#e8500a;color:white;padding:11px 28px;border-radius:9px;text-decoration:none;font-weight:700">
+                Mua ngay →
+            </a>
+        </div>
+    }
+    else
+    {
+        @foreach (var order in Model)
+        {
+            <div class="order-card">
+                <div class="order-card-head">
+                    <div>
+                        <div class="order-id">#@order.Id</div>
+                        <div class="order-date">@order.CreatedAt.ToString("HH:mm — dd/MM/yyyy")</div>
+                    </div>
+                    <span class="status-badge st-@order.Status">
+                        @(order.Status switch {
+                            OrderStatus.Pending   => "⏳ Chờ xử lý",
+                            OrderStatus.Confirmed => "✅ Đã xác nhận",
+                            OrderStatus.Shipping  => "🚚 Đang giao",
+                            OrderStatus.Delivered => "✓ Đã giao hàng",
+                            OrderStatus.Cancelled => "✗ Đã huỷ",
+                            _ => order.Status.ToString()
+                        })
+                    </span>
+                </div>
+                <div class="order-card-body">
+                    <!-- Preview ảnh sản phẩm -->
+                    <div class="order-items-preview">
+                        @foreach (var d in order.OrderDetails.Take(4))
+                        {
+                            <div class="preview-thumb">
+                                <img src="@(d.Product?.ImageUrl ?? "/images/no-image.png")"
+                                     alt="@d.Product?.Name" />
+                            </div>
+                        }
+                        @if (order.OrderDetails.Count > 4)
+                        {
+                            <div class="preview-more">+@(order.OrderDetails.Count - 4)</div>
+                        }
+                        <div style="font-size:13px;color:#888;margin-left:4px">
+                            @string.Join(", ", order.OrderDetails.Take(2).Select(d => d.Product?.Name ?? ""))
+                            @if (order.OrderDetails.Count > 2)
+                            { <text>...</text> }
+                        </div>
+                    </div>
+                    <div class="order-card-foot">
+                        <div class="order-total">@order.TotalAmount.ToString("N0") ₫</div>
+                        <a class="btn-detail"
+                           asp-action="Detail" asp-route-id="@order.Id">
+                            Xem chi tiết →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

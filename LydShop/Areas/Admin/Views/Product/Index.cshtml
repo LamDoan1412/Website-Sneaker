@@ -1,0 +1,199 @@
+@using LydShop.Models
+@model List<LydShop.Models.Product>
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+    var categories = ViewBag.Categories as List<Category>;
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+}
+
+<div class="container-fluid py-4 animate-fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="fw-800 text-light-dark h3 mb-1">Quản lý Sản Phẩm</h1>
+            <p class="text-muted fs-7 mb-0">Xem và chỉnh sửa danh sách sản phẩm giày LydShop</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2.5 fw-600 shadow-sm-primary btn-hover-scale">
+            <i class="fas fa-plus me-2"></i>Thêm sản phẩm mới
+        </a>
+    </div>
+
+    <!-- Filters Block -->
+    <div class="card border-0 shadow-sm p-3 rounded-4 glass-card mb-4">
+        <form asp-action="Index" method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 text-muted"><i class="fas fa-search"></i></span>
+                    <input type="text" name="search" class="form-control bg-light border-0 py-2.5 shadow-none text-dark fs-7" placeholder="Tìm theo tên sản phẩm hoặc thương hiệu..." value="@ViewBag.Search" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="categoryId" class="form-select bg-light border-0 py-2.5 shadow-none text-dark fs-7" onchange="this.form.submit()">
+                    <option value="">Tất cả danh mục</option>
+                    @if (categories != null)
+                    {
+                        foreach (var cat in categories)
+                        {
+                            <option value="@cat.Id" selected="@(ViewBag.CategoryId == cat.Id)">@cat.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 col-6">
+                <button type="submit" class="btn btn-primary w-100 py-2.5 rounded-3 fw-600 shadow-sm-primary btn-hover-scale fs-7">
+                    Tìm kiếm <i class="fas fa-search ms-1 fs-8"></i>
+                </button>
+            </div>
+            <div class="col-md-2 col-6">
+                <a href="/Admin/Product" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 fw-600 btn-hover-scale fs-7">
+                    Reset bộ lọc
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Products Table -->
+    <div class="card border-0 shadow-sm p-4 rounded-4 glass-card mb-4">
+        <div class="table-responsive">
+            <table class="table align-middle custom-table mb-0 fs-7">
+                <thead>
+                    <tr class="text-muted border-bottom border-light-subtle fw-600">
+                        <th scope="col" style="width: 80px;">Sản phẩm</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Danh mục</th>
+                        <th scope="col">Giá bán</th>
+                        <th scope="col" class="text-center">Kho hàng</th>
+                        <th scope="col" class="text-center">Nổi bật</th>
+                        <th scope="col" class="text-center">Trạng thái</th>
+                        <th scope="col" class="text-center" style="width: 150px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4 text-muted">Không tìm thấy sản phẩm nào.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var product in Model)
+                        {
+                            var hasSale = product.SalePrice.HasValue;
+                            var activePrice = product.SalePrice ?? product.Price;
+
+                            <tr>
+                                <td>
+                                    <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop" : product.ImageUrl)" 
+                                         class="rounded-3" alt="@product.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                                </td>
+                                <td>
+                                    <h6 class="fw-700 text-dark mb-0 limit-2-lines">@product.Name</h6>
+                                    <small class="text-muted">Brand: @product.Brand</small>
+                                </td>
+                                <td class="text-muted">
+                                    @product.Category.Name
+                                </td>
+                                <td>
+                                    @if (hasSale)
+                                    {
+                                        <span class="text-decoration-line-through text-muted fs-8">@product.Price.ToString("N0") đ</span>
+                                        <strong class="text-danger d-block">@product.SalePrice!.Value.ToString("N0") đ</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong class="text-primary">@product.Price.ToString("N0") đ</strong>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (product.Stock > 10)
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">
+                                            @product.Stock
+                                        </span>
+                                    }
+                                    else if (product.Stock > 0)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1 rounded-pill">
+                                            @product.Stock (Ít)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 rounded-pill">
+                                            Hết hàng
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (product.IsFeatured)
+                                    {
+                                        <span class="text-warning"><i class="fas fa-star"></i></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted"><i class="far fa-star"></i></span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <form asp-action="ToggleActive" asp-route-id="@product.Id" method="post" class="d-inline">
+                                        <button type="submit" class="border-0 bg-transparent p-0 shadow-none">
+                                            @if (product.IsActive)
+                                            {
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill cursor-pointer" title="Nhấp để ẩn">
+                                                    Hoạt động
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 rounded-pill cursor-pointer" title="Nhấp để hiển thị">
+                                                    Ẩn
+                                                </span>
+                                            }
+                                        </button>
+                                    </form>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-outline-warning btn-sm rounded-circle p-1" title="Chỉnh sửa" style="width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-edit fs-8"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-outline-danger btn-sm rounded-circle p-1" title="Xóa" style="width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-trash-alt fs-8"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation" class="mb-4">
+            <ul class="pagination justify-content-center gap-2">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link border-0 rounded-circle shadow-sm py-2 px-3 fs-7" href="@Url.Action("Index", new { search = ViewBag.Search, categoryId = ViewBag.CategoryId, page = currentPage - 1 })">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(currentPage == i ? "active" : "")">
+                        <a class="page-link border-0 rounded-circle shadow-sm py-2 px-3 fs-7" href="@Url.Action("Index", new { search = ViewBag.Search, categoryId = ViewBag.CategoryId, page = i })">@i</a>
+                    </li>
+                }
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link border-0 rounded-circle shadow-sm py-2 px-3 fs-7" href="@Url.Action("Index", new { search = ViewBag.Search, categoryId = ViewBag.CategoryId, page = currentPage + 1 })">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

@@ -1,0 +1,627 @@
+@* Views/Shop/Detail.cshtml *@
+@model LydShop.ViewModels.ProductDetailViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+}
+
+@section Styles {
+<style>
+.detail-wrap { max-width: 1280px; margin: 0 auto; padding: 32px 40px 60px; }
+.breadcrumb-nav { font-size: 12px; color: #aaa; margin-bottom: 28px; }
+.breadcrumb-nav a { color: #aaa; text-decoration: none; }
+.breadcrumb-nav a:hover { color: #e8500a; }
+.breadcrumb-nav span { color: #444; font-weight: 600; }
+
+/* PRODUCT LAYOUT */
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 52px;
+    margin-bottom: 64px;
+}
+
+/* GALLERY */
+.gallery-wrap { display: flex; gap: 14px; }
+.thumb-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 72px;
+    flex-shrink: 0;
+}
+.thumb {
+    width: 72px; height: 72px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: #f5f2ee;
+    transition: border-color .18s;
+}
+.thumb:hover, .thumb.active { border-color: #e8500a; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.main-img {
+    flex: 1;
+    aspect-ratio: 1;
+    background: #f5f2ee;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.main-img img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 20px;
+    transition: opacity .25s;
+}
+
+/* INFO */
+.product-brand { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e8500a; margin-bottom: 8px; }
+.product-name { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; color: #111; }
+.rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.stars-lg { color: #f5a623; font-size: 18px; letter-spacing: 2px; }
+.rating-txt { font-size: 13px; color: #888; }
+
+.price-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+.price-big { font-size: 2.4rem; font-weight: 800; color: #e8500a; letter-spacing: -1px; }
+.price-ori { font-size: 1rem; color: #bbb; text-decoration: line-through; }
+.badge-discount { background: #fff3ee; color: #e8500a; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+
+.stock-row { font-size: 13px; margin-bottom: 20px; }
+.in-stock { color: #22c55e; font-weight: 600; }
+.out-stock { color: #ef4444; font-weight: 600; }
+
+.section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.section-label span { color: #e8500a; font-weight: 700; }
+
+/* SIZE GRID */
+.size-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.size-btn {
+    width: 52px; height: 44px;
+    border: 1.5px solid #e8e4de;
+    background: white;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .18s;
+    font-family: 'Inter', sans-serif;
+}
+.size-btn:hover:not(.disabled) { border-color: #e8500a; color: #e8500a; }
+.size-btn.selected { background: #111; border-color: #111; color: white; }
+.size-btn.disabled { opacity: .3; cursor: not-allowed; text-decoration: line-through; }
+
+/* QTY */
+.qty-row { display: flex; align-items: center; gap: 0; margin-bottom: 20px; width: fit-content; }
+.qty-btn {
+    width: 40px; height: 40px;
+    border: 1.5px solid #e8e4de;
+    background: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+    font-family: 'Inter', sans-serif;
+}
+.qty-btn:first-child { border-radius: 8px 0 0 8px; }
+.qty-btn:last-child  { border-radius: 0 8px 8px 0; }
+.qty-btn:hover { background: #f5f2ee; }
+.qty-num {
+    width: 56px; height: 40px;
+    border: 1.5px solid #e8e4de;
+    border-left: none; border-right: none;
+    text-align: center;
+    font-size: 15px; font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    -moz-appearance: textfield;
+}
+.qty-num::-webkit-outer-spin-button,
+.qty-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+/* ACTIONS */
+.action-row { display: flex; gap: 12px; margin-bottom: 24px; }
+.btn-cart {
+    flex: 1; height: 52px;
+    border: 2px solid #111;
+    background: white; color: #111;
+    border-radius: 11px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    transition: all .18s;
+    font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-cart:hover { background: #111; color: white; }
+.btn-buy {
+    flex: 1; height: 52px;
+    border: none;
+    background: #e8500a; color: white;
+    border-radius: 11px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    transition: background .18s, transform .15s;
+    font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-buy:hover { background: #ff6b2b; transform: translateY(-1px); }
+
+/* FEATURES */
+.features-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.feature-chip {
+    display: flex; align-items: center; gap: 9px;
+    background: #f9f7f4;
+    border: 1px solid #ede9e2;
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 12.5px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* REVIEWS */
+.reviews-wrap { margin-top: 60px; }
+.reviews-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+.reviews-grid { display: grid; grid-template-columns: 280px 1fr; gap: 40px; margin-top: 32px; }
+.rating-box {
+    background: #f9f7f4;
+    border-radius: 14px;
+    padding: 28px;
+    text-align: center;
+    position: sticky; top: 80px; align-self: start;
+}
+.rating-big { font-size: 4.5rem; font-weight: 800; color: #e8500a; line-height: 1; }
+.rating-stars-big { font-size: 22px; color: #f5a623; letter-spacing: 3px; margin: 8px 0; }
+.rating-count { font-size: 13px; color: #999; }
+.bar-list { margin-top: 20px; display: flex; flex-direction: column; gap: 7px; }
+.bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.bar-label { width: 36px; text-align: right; color: #888; }
+.bar-track { flex: 1; height: 7px; background: #e8e4de; border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; background: #e8500a; border-radius: 99px; }
+.bar-count { width: 20px; color: #aaa; }
+
+.review-list { display: flex; flex-direction: column; gap: 18px; }
+.review-card {
+    background: #f9f7f4;
+    border-radius: 12px;
+    padding: 20px;
+}
+.review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.reviewer { display: flex; align-items: center; gap: 10px; }
+.avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: #e8500a;
+    color: white;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.reviewer-name { font-weight: 600; font-size: 13.5px; }
+.review-date { font-size: 11px; color: #aaa; margin-top: 2px; }
+.review-stars { color: #f5a623; font-size: 15px; letter-spacing: 1px; }
+.review-body { font-size: 13.5px; color: #666; line-height: 1.7; }
+.verified { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #22c55e; background: #f0fff4; padding: 2px 8px; border-radius: 5px; margin-top: 10px; }
+
+/* WRITE REVIEW */
+.write-review { background: #f9f7f4; border-radius: 14px; padding: 28px; margin-top: 28px; }
+.write-review h5 { font-size: 1.1rem; font-weight: 800; margin-bottom: 18px; }
+.star-picker { display: flex; gap: 8px; margin-bottom: 16px; }
+.star-pick { font-size: 30px; cursor: pointer; color: #e0dbd2; transition: color .14s, transform .14s; }
+.star-pick:hover, .star-pick.lit { color: #f5a623; transform: scale(1.15); }
+.form-ctrl {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid #e8e4de; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    background: white; outline: none;
+    transition: border-color .18s;
+    resize: vertical;
+}
+.form-ctrl:focus { border-color: #e8500a; }
+.btn-submit-review {
+    background: #111; color: white; border: none;
+    height: 46px; padding: 0 28px;
+    border-radius: 9px; font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: background .18s; margin-top: 12px;
+}
+.btn-submit-review:hover { background: #e8500a; }
+
+/* RELATED */
+.related-section { margin-top: 60px; }
+.related-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 20px; }
+.related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.related-card { background: white; border-radius: 12px; border: 1px solid #ede9e2; text-decoration: none; color: inherit; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+.related-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.08); }
+.related-img { aspect-ratio: 1; background: #f5f2ee; overflow: hidden; }
+.related-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.related-card:hover .related-img img { transform: scale(1.05); }
+.related-info { padding: 12px 14px; }
+.related-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.related-price { font-size: 14px; font-weight: 700; color: #e8500a; }
+
+@@media (max-width: 900px) {
+    .product-detail-grid { grid-template-columns: 1fr; gap: 28px; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .rating-box { position: static; }
+    .related-grid { grid-template-columns: repeat(2, 1fr); }
+    .detail-wrap { padding: 20px 16px; }
+}
+</style>
+}
+
+<div class="detail-wrap">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav">
+        <a asp-controller="Shop" asp-action="Index">Trang chủ</a> /
+        <a asp-controller="Shop" asp-action="Index" asp-route-categoryId="@Model.Product.CategoryId">
+            @Model.Product.Category?.Name
+        </a> /
+        <span>@Model.Product.Name</span>
+    </nav>
+
+    <!-- ── PRODUCT ── -->
+    <div class="product-detail-grid">
+
+        <!-- Gallery -->
+        <div class="gallery-wrap">
+            @{
+                var gallery = new List<string>();
+                if (!string.IsNullOrEmpty(Model.Product.ImageUrl))
+                    gallery.Add(Model.Product.ImageUrl);
+
+                // ImageGallery lưu dạng JSON ["url1","url2",...]
+                if (!string.IsNullOrEmpty(Model.Product.ImageGallery))
+                {
+                    try {
+                        var extra = System.Text.Json.JsonSerializer.Deserialize<List<string>>(Model.Product.ImageGallery);
+                        if (extra != null) gallery.AddRange(extra);
+                    } catch { }
+                }
+                if (!gallery.Any()) gallery.Add("/images/no-image.png");
+            }
+            <div class="thumb-col">
+                @foreach (var (img, idx) in gallery.Select((x, i) => (x, i)))
+                {
+                    <div class="thumb @(idx == 0 ? "active" : "")"
+                         onclick="switchImg(this, '@img')">
+                        <img src="@img" alt="ảnh @(idx+1)" />
+                    </div>
+                }
+            </div>
+            <div class="main-img">
+                <img id="mainImg" src="@gallery[0]" alt="@Model.Product.Name" />
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div>
+            <div class="product-brand">@Model.Product.Brand</div>
+            <h1 class="product-name">@Model.Product.Name</h1>
+
+            <!-- Rating -->
+            <div class="rating-row">
+                <span class="stars-lg">
+                    @for (int i = 1; i <= 5; i++)
+                    { @(i <= Math.Round(Model.AverageRating) ? "★" : "☆") }
+                </span>
+                <span class="rating-txt">
+                    <strong>@Model.AverageRating.ToString("0.0")</strong>
+                    (@Model.ReviewCount đánh giá)
+                </span>
+            </div>
+
+            <!-- Price -->
+            <div class="price-row">
+                <span class="price-big">@Model.Product.CurrentPrice.ToString("N0") ₫</span>
+                @if (Model.Product.SalePrice.HasValue && Model.Product.SalePrice > 0)
+                {
+                    <span class="price-ori">@Model.Product.Price.ToString("N0") ₫</span>
+                    var disc = (int)Math.Round((1 - Model.Product.SalePrice.Value / Model.Product.Price) * 100);
+                    <span class="badge-discount">-@disc%</span>
+                }
+            </div>
+
+            <!-- Stock -->
+            <div class="stock-row">
+                @if (Model.Product.Stock > 0)
+                { <span class="in-stock">● Còn hàng — @Model.Product.Stock đôi</span> }
+                else
+                { <span class="out-stock">⚠ Hết hàng</span> }
+            </div>
+
+            <!-- Size -->
+            @if (Model.Product.SizeList.Any())
+            {
+                <div class="section-label">
+                    Chọn size <span id="sizeLabel">—</span>
+                </div>
+                <div class="size-grid">
+                    @foreach (var s in Model.Product.SizeList)
+                    {
+                        <button type="button" class="size-btn" onclick="selectSize(this,'@s')">
+                            @s
+                        </button>
+                    }
+                </div>
+            }
+
+            <!-- Qty -->
+            <div class="section-label" style="margin-bottom:10px">Số lượng</div>
+            <div class="qty-row">
+                <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+                <input type="number" class="qty-num" id="qtyInput"
+                       value="1" min="1" max="@Model.Product.Stock" />
+                <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+
+            <!-- Actions -->
+            @if (Model.Product.Stock > 0)
+            {
+                <div class="action-row">
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post"
+                          style="flex:1;display:flex" onsubmit="return validateForm()">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.Product.Id" />
+                        <input type="hidden" name="quantity" id="hidQty" value="1" />
+                        <input type="hidden" name="size" id="hidSize" value="" />
+                        <input type="hidden" name="color" value="" />
+                        <button type="submit" class="btn-cart" style="width:100%">
+                            <i class="fas fa-bag-shopping"></i> Thêm vào giỏ
+                        </button>
+                    </form>
+                    <form asp-controller="Order" asp-action="BuyNow" method="post"
+                          style="flex:1;display:flex" onsubmit="return validateForm()">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.Product.Id" />
+                        <input type="hidden" name="qty" id="hidQtyBuy" value="1" />
+                        <input type="hidden" name="size" id="hidSizeBuy" value="" />
+                        <button type="submit" class="btn-buy" style="width:100%">
+                            <i class="fas fa-bolt"></i> Mua ngay
+                        </button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <button class="btn-cart" style="width:100%;cursor:not-allowed;opacity:.5" disabled>
+                    Hết hàng
+                </button>
+            }
+
+            <!-- Features -->
+            <div class="features-row">
+                <div class="feature-chip">🚚 Giao hàng toàn quốc</div>
+                <div class="feature-chip">↩️ Đổi trả 7 ngày</div>
+                <div class="feature-chip">✅ Hàng chính hãng 100%</div>
+                <div class="feature-chip">🔒 Thanh toán an toàn</div>
+            </div>
+
+            <!-- Description -->
+            @if (!string.IsNullOrEmpty(Model.Product.Description))
+            {
+                <div style="font-size:13.5px;color:#666;line-height:1.8">
+                    @Model.Product.Description
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- ── REVIEWS ── -->
+    <div class="reviews-wrap">
+        <h2 class="reviews-title">Đánh giá sản phẩm</h2>
+        <p style="color:#aaa;font-size:13px">Chia sẻ cảm nhận của bạn với cộng đồng LydShop</p>
+
+        <div class="reviews-grid">
+
+            <!-- Rating overview -->
+            <div class="rating-box">
+                <div class="rating-big">@Model.AverageRating.ToString("0.0")</div>
+                <div class="rating-stars-big">
+                    @for (int i = 1; i <= 5; i++)
+                    { @(i <= Math.Round(Model.AverageRating) ? "★" : "☆") }
+                </div>
+                <div class="rating-count">@Model.ReviewCount lượt đánh giá</div>
+                <div class="bar-list">
+                    @for (int star = 5; star >= 1; star--)
+                    {
+                        var cnt = Model.Reviews.Count(r => r.Rating == star);
+                        var pct = Model.ReviewCount > 0 ? (double)cnt / Model.ReviewCount * 100 : 0;
+                        <div class="bar-row">
+                            <span class="bar-label">@star ★</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width:@pct.ToString("0")%"></div>
+                            </div>
+                            <span class="bar-count">@cnt</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Review list + form -->
+            <div>
+                <div class="review-list">
+                    @if (!Model.Reviews.Any())
+                    {
+                        <p style="color:#aaa;font-size:13.5px">Chưa có đánh giá. Hãy là người đầu tiên!</p>
+                    }
+                    @foreach (var rv in Model.Reviews)
+                    {
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer">
+                                    <div class="avatar">
+                                        @(rv.User?.FullName?.Substring(0,1).ToUpper() ?? "?")
+                                    </div>
+                                    <div>
+                                        <div class="reviewer-name">
+                                            @(rv.User?.FullName ?? rv.User?.UserName ?? "Ẩn danh")
+                                        </div>
+                                        <div class="review-date">
+                                            @rv.CreatedAt.ToString("dd/MM/yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="review-stars">
+                                    @for (int i = 1; i <= 5; i++)
+                                    { @(i <= rv.Rating ? "★" : "☆") }
+                                </div>
+                            </div>
+                            <div class="review-body">@rv.Comment</div>
+                            @if (rv.IsVerifiedPurchase)
+                            {
+                                <div class="verified">✓ Đã mua hàng</div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Write review -->
+                @if (User.Identity?.IsAuthenticated == true && !Model.UserHasReviewed)
+                {
+                    <div class="write-review">
+                        <h5>Viết đánh giá</h5>
+                        <form asp-controller="Review" asp-action="Submit" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                            <input type="hidden" name="Rating" id="ratingVal" value="0" />
+
+                            <div style="margin-bottom:8px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa">
+                                Số sao *
+                            </div>
+                            <div class="star-picker">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <span class="star-pick" data-val="@i" onclick="setRating(@i)">★</span>
+                                }
+                            </div>
+
+                            <div style="margin-bottom:8px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa">
+                                Nhận xét
+                            </div>
+                            <textarea name="Comment" class="form-ctrl" rows="4"
+                                      placeholder="Chia sẻ cảm nhận về sản phẩm..."></textarea>
+
+                            <button type="submit" class="btn-submit-review">
+                                Gửi đánh giá →
+                            </button>
+                        </form>
+                    </div>
+                }
+                else if (!User.Identity?.IsAuthenticated ?? false)
+                {
+                    <div class="write-review" style="text-align:center">
+                        <p style="color:#aaa;margin-bottom:14px">Đăng nhập để viết đánh giá</p>
+                        <a asp-controller="Account" asp-action="Login"
+                           asp-route-returnUrl="@Context.Request.Path"
+                           class="btn-submit-review"
+                           style="text-decoration:none;display:inline-block;line-height:46px;padding:0 28px">
+                            Đăng nhập →
+                        </a>
+                    </div>
+                }
+                else if (Model.UserHasReviewed)
+                {
+                    <div class="write-review" style="text-align:center;color:#aaa;font-size:13.5px">
+                        ✅ Bạn đã đánh giá sản phẩm này
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ── RELATED ── -->
+    @if (ViewBag.Related is List<LydShop.Models.Product> related && related.Any())
+    {
+        <div class="related-section">
+            <h3 class="related-title">Sản phẩm liên quan</h3>
+            <div class="related-grid">
+                @foreach (var p in related)
+                {
+                    <a class="related-card" asp-action="Detail" asp-route-id="@p.Id">
+                        <div class="related-img">
+                            <img src="@(p.ImageUrl ?? "/images/no-image.png")"
+                                 alt="@p.Name" loading="lazy" />
+                        </div>
+                        <div class="related-info">
+                            <div class="related-name">@p.Name</div>
+                            <div class="related-price">@p.CurrentPrice.ToString("N0") ₫</div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+<script>
+let selectedSize = '';
+
+function switchImg(thumb, src) {
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+    const img = document.getElementById('mainImg');
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = src; img.style.opacity = '1'; }, 200);
+}
+
+function selectSize(btn, size) {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedSize = size;
+    document.getElementById('sizeLabel').textContent = 'EU ' + size;
+    document.getElementById('hidSize').value = size;
+    document.getElementById('hidSizeBuy').value = size;
+}
+
+function changeQty(delta) {
+    const inp = document.getElementById('qtyInput');
+    const max = parseInt(inp.max) || 99;
+    let v = parseInt(inp.value) + delta;
+    if (v < 1) v = 1;
+    if (v > max) v = max;
+    inp.value = v;
+    document.getElementById('hidQty').value = v;
+    document.getElementById('hidQtyBuy').value = v;
+}
+
+document.getElementById('qtyInput')?.addEventListener('change', function() {
+    document.getElementById('hidQty').value = this.value;
+    document.getElementById('hidQtyBuy').value = this.value;
+});
+
+function validateForm() {
+    @if (Model.Product.SizeList.Any())
+    {
+        <text>
+        if (!selectedSize) {
+            alert('Vui lòng chọn size!');
+            return false;
+        }
+        </text>
+    }
+    return true;
+}
+
+function setRating(val) {
+    document.getElementById('ratingVal').value = val;
+    document.querySelectorAll('.star-pick').forEach((s, i) => {
+        s.classList.toggle('lit', i < val);
+    });
+}
+</script>
+}

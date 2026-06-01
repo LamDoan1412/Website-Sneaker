@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | LydShop Admin</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="admin-body">
+
+    <!-- Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-shoe-prints me-2"></i>
+            <span>LydShop Admin</span>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-label">TỔNG QUAN</div>
+            <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+               asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+            </a>
+
+            <div class="nav-label">QUẢN LÝ</div>
+            <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
+               asp-area="Admin" asp-controller="Product" asp-action="Index">
+                <i class="fas fa-box"></i><span>Sản phẩm</span>
+            </a>
+            <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+               asp-area="Admin" asp-controller="Category" asp-action="Index">
+                <i class="fas fa-tags"></i><span>Danh mục</span>
+            </a>
+            <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")"
+               asp-area="Admin" asp-controller="Order" asp-action="Index">
+                <i class="fas fa-shopping-cart"></i><span>Đơn hàng</span>
+            </a>
+            <a class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")"
+               asp-area="Admin" asp-controller="User" asp-action="Index">
+                <i class="fas fa-users"></i><span>Người dùng</span>
+            </a>
+
+            <div class="nav-label">HỆ THỐNG</div>
+            <a class="sidebar-link" href="/" target="_blank">
+                <i class="fas fa-store"></i><span>Xem cửa hàng</span>
+            </a>
+            <form asp-controller="Account" asp-action="Logout" asp-area="" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="sidebar-link w-100 text-start border-0 bg-transparent text-danger-link">
+                    <i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="admin-main" id="adminMain">
+        <!-- Top Bar -->
+        <div class="admin-topbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="topbar-breadcrumb">
+                @if (ViewData["Title"] != null)
+                {
+                    <span>@ViewData["Title"]</span>
+                }
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-shield me-2 text-primary"></i>
+                <span>@User.Identity?.Name?.Split('@')[0]</span>
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible m-3 fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible m-3 fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <!-- Content -->
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+            document.getElementById('adminSidebar').classList.toggle('collapsed');
+            document.getElementById('adminMain').classList.toggle('expanded');
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,81 @@
+@model List<LydShop.Models.Category>
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+}
+
+<div class="container-fluid py-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="fw-800 text-light-dark h3 mb-1">Quản lý Danh Mục</h1>
+            <p class="text-muted fs-7 mb-0">Danh sách các danh mục giày của LydShop</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary rounded-pill px-4 py-2.5 fw-600 shadow-sm-primary btn-hover-scale">
+            <i class="fas fa-plus me-2"></i>Thêm danh mục mới
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 rounded-4 glass-card">
+        <div class="table-responsive">
+            <table class="table align-middle custom-table mb-0 fs-7">
+                <thead>
+                    <tr class="text-muted border-bottom border-light-subtle fw-600">
+                        <th scope="col" style="width: 80px;">ID</th>
+                        <th scope="col">Tên danh mục</th>
+                        <th scope="col">Đường dẫn (Slug)</th>
+                        <th scope="col" class="text-center">Số sản phẩm</th>
+                        <th scope="col" class="text-center">Trạng thái</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col" class="text-center" style="width: 150px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">Chưa có danh mục nào. Hãy thêm mới!</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var cat in Model)
+                        {
+                            <tr>
+                                <td><strong class="text-dark">#@cat.Id</strong></td>
+                                <td class="fw-700 text-dark">@cat.Name</td>
+                                <td class="text-muted">@cat.Slug</td>
+                                <td class="text-center fw-600 text-primary">
+                                    @cat.Products.Count
+                                </td>
+                                <td class="text-center">
+                                    @if (cat.IsActive)
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill fs-9">
+                                            Hoạt động
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 rounded-pill fs-9">
+                                            Khóa
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-muted">@cat.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-outline-warning btn-sm rounded-circle p-1" title="Chỉnh sửa" style="width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-edit fs-8"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@cat.Id" class="btn btn-outline-danger btn-sm rounded-circle p-1" title="Xóa" style="width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-trash-alt fs-8"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

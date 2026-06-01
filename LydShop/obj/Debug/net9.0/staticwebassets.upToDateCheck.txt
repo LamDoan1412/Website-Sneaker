@@ -1,0 +1,134 @@
+wwwroot\css\admin.css
+wwwroot\css\site.css
+wwwroot\favicon.ico
+wwwroot\js\admin.js
+wwwroot\js\cart.js
+wwwroot\js\site.js
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+wwwroot\lib\bootstrap\LICENSE
+wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js
+wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
+wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+wwwroot\lib\jquery-validation\dist\additional-methods.js
+wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+wwwroot\lib\jquery-validation\LICENSE.md
+wwwroot\lib\jquery\dist\jquery.js
+wwwroot\lib\jquery\dist\jquery.min.js
+wwwroot\lib\jquery\dist\jquery.min.map
+wwwroot\lib\jquery\LICENSE.txt
+wwwroot\images\products\af1-07-lv8.jpg
+wwwroot\images\products\af1-07.jpg
+wwwroot\images\products\af1-mid-custom.jpg
+wwwroot\images\products\aj1-low-se.jpg
+wwwroot\images\products\aj1-low-women.jpg
+wwwroot\images\products\blazer-mid-77.jpg
+wwwroot\images\products\dunk-low-retro.jpg
+wwwroot\images\products\killshot-2-premium.jpg
+wwwroot\images\products\pegasus-trail-goretex.jpg
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery\dist\jquery.min.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery\dist\jquery.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery\dist\jquery.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation\LICENSE.md
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation\dist\additional-methods.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\js\site.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\js\cart.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\js\admin.js
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\favicon.ico
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\lib\jquery\LICENSE.txt
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\css\site.css
+D:\Workspace for Web\SneakerStore by ASp.net\LydShop\LydShop\wwwroot\css\admin.css

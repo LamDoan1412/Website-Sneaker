@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — LydShop</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --accent:  #e8500a;
+            --accent2: #ff6b2b;
+            --dark:    #111111;
+            --cream:   #faf9f7;
+            --border:  #e8e4de;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--cream); color: #222; margin: 0; }
+
+        /* ── NAVBAR ── */
+        .lyd-navbar {
+            background: var(--dark);
+            height: 62px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            gap: 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 0 rgba(255,255,255,.06);
+        }
+        .lyd-brand {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .lyd-brand .brand-icon {
+            width: 32px; height: 32px;
+            background: var(--accent);
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px;
+        }
+        .lyd-brand span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2px;
+            flex: 1;
+        }
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 7px;
+            transition: all .18s;
+            white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+            background: rgba(255,255,255,.09);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .nav-icon {
+            width: 38px; height: 38px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255,255,255,.08);
+            color: #aaa;
+            font-size: 15px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all .18s;
+            text-decoration: none;
+            position: relative;
+        }
+        .nav-icon:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+        .cart-count {
+            position: absolute;
+            top: 4px; right: 4px;
+            width: 16px; height: 16px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--dark);
+        }
+
+        /* ── USER DROPDOWN ── */
+        .user-dropdown {
+            position: relative;
+        }
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,.08);
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px 6px 6px;
+            cursor: pointer;
+            transition: background .18s;
+            color: #fff;
+        }
+        .user-btn:hover { background: rgba(255,255,255,.15); }
+        .user-avatar {
+            width: 28px; height: 28px;
+            background: var(--accent);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .user-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 12px;
+            min-width: 220px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.5);
+            overflow: hidden;
+            display: none;
+            z-index: 9999;
+        }
+        .user-menu.show { display: block; }
+        .user-menu-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+        .user-menu-name {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .user-menu-email {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .user-menu a,
+        .user-menu button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all .15s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .user-menu a:hover { background: rgba(255,255,255,.06); color: #fff; }
+        .user-menu a i, .user-menu button i { width: 16px; text-align: center; font-size: 13px; }
+        .user-menu .divider { height: 1px; background: rgba(255,255,255,.07); margin: 4px 0; }
+        .user-menu .logout-btn { color: #f87171; }
+        .user-menu .logout-btn:hover { background: rgba(239,68,68,.1); color: #ef4444; }
+
+        /* Login button */
+        .btn-nav-login {
+            background: var(--accent);
+            color: #fff;
+            padding: 7px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            transition: background .18s;
+            white-space: nowrap;
+        }
+        .btn-nav-login:hover { background: var(--accent2); color: #fff; }
+
+        /* ── TOAST ── */
+        .toast-stack {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .lyd-toast {
+            background: #111;
+            color: #f0ede8;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.35);
+            min-width: 260px;
+            max-width: 360px;
+            border-left: 3px solid var(--accent);
+            animation: toastIn .3s ease;
+            pointer-events: all;
+        }
+        .lyd-toast.success { border-color: #22c55e; }
+        .lyd-toast.error   { border-color: #ef4444; }
+        @@keyframes toastIn {
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        /* ── FOOTER ── */
+        .lyd-footer {
+            background: var(--dark);
+            color: #555;
+            padding: 50px 60px 28px;
+            margin-top: 80px;
+        }
+        .footer-brand { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .footer-brand span { color: var(--accent); }
+        .footer-desc { font-size: 13px; color: #555; margin-top: 8px; line-height: 1.7; max-width: 260px; }
+        .footer-col-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #444; margin-bottom: 14px; }
+        .footer-col a { display: block; color: #555; text-decoration: none; font-size: 13.5px; margin-bottom: 9px; transition: color .18s; }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid #1c1c1c; margin-top: 40px; padding-top: 20px; display: flex; justify-content: space-between; font-size: 12px; }
+
+        @@media (max-width: 768px) {
+            .lyd-navbar { padding: 0 16px; gap: 12px; }
+            .nav-links { display: none; }
+            .lyd-footer { padding: 40px 20px 24px; }
+            .footer-grid { grid-template-columns: 1fr !important; }
+            .user-name { display: none; }
+        }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="lyd-navbar">
+    <a class="lyd-brand" asp-controller="Shop" asp-action="Index">
+        <div class="brand-icon">👟</div>
+        Lyd<span>Shop</span>
+    </a>
+
+    <div class="nav-links">
+        <a asp-controller="Shop" asp-action="Index"
+           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Shop" ? "active" : "")">
+            Sản phẩm
+        </a>
+        <a asp-controller="Shop" asp-action="Index" asp-route-brand="Nike">Nike</a>
+        <a asp-controller="Shop" asp-action="Index" asp-route-brand="Adidas">Adidas</a>
+        <a href="#">Sale 🔥</a>
+    </div>
+
+    <div class="nav-actions">
+
+        <!-- Giỏ hàng -->
+        <a class="nav-icon" asp-controller="Cart" asp-action="Index" title="Giỏ hàng">
+            <i class="fas fa-bag-shopping"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </a>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            // User dropdown
+            var displayName = User.Identity.Name?.Split('@')[0] ?? "User";
+            var avatarChar  = displayName.Length > 0 ? displayName[0].ToString().ToUpper() : "U";
+        <div class="user-dropdown" id="userDropdown">
+            <button class="user-btn" onclick="toggleUserMenu()" type="button">
+                <div class="user-avatar">@avatarChar</div>
+                <span class="user-name">@displayName</span>
+                <i class="fas fa-chevron-down" style="font-size:10px;color:#888;margin-left:2px"></i>
+            </button>
+
+            <div class="user-menu" id="userMenu">
+                <div class="user-menu-header">
+                    <div class="user-menu-name">@User.Identity.Name?.Split('@')[0]</div>
+                    <div class="user-menu-email">@User.Identity.Name</div>
+                </div>
+
+                <a asp-controller="Account" asp-action="Profile">
+                    <i class="fas fa-user"></i> Thông tin tài khoản
+                </a>
+                <a asp-controller="Order" asp-action="History">
+                    <i class="fas fa-receipt"></i> Đơn hàng của tôi
+                </a>
+                <a asp-controller="Cart" asp-action="Index">
+                    <i class="fas fa-bag-shopping"></i> Giỏ hàng
+                </a>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="divider"></div>
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                        <i class="fas fa-gauge"></i> Trang Admin
+                    </a>
+                }
+
+                <div class="divider"></div>
+                <form asp-controller="Account" asp-action="Logout" method="post" style="margin:0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-right-from-bracket"></i> Đăng xuất
+                    </button>
+                </form>
+            </div>
+        </div>
+        }
+        else
+        {
+            <a class="btn-nav-login" asp-controller="Account" asp-action="Login">
+                Đăng nhập
+            </a>
+            <a asp-controller="Account" asp-action="Register"
+               style="color:#aaa;font-size:13px;font-weight:500;text-decoration:none;padding:6px 10px">
+                Đăng ký
+            </a>
+        }
+    </div>
+</nav>
+
+<!-- ── PAGE CONTENT ── -->
+@RenderBody()
+
+<!-- ── FOOTER ── -->
+<footer class="lyd-footer">
+    <div class="footer-grid"
+         style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:0 auto">
+        <div>
+            <div class="footer-brand">Lyd<span>Shop</span></div>
+            <p class="footer-desc">Cửa hàng giày thể thao chính hãng — Nike, Adidas, Puma, New Balance và nhiều thương hiệu hàng đầu.</p>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">Danh mục</div>
+            <a asp-controller="Shop" asp-action="Index">Tất cả sản phẩm</a>
+            <a asp-controller="Shop" asp-action="Index" asp-route-brand="Nike">Nike</a>
+            <a asp-controller="Shop" asp-action="Index" asp-route-brand="Adidas">Adidas</a>
+            <a asp-controller="Shop" asp-action="Index" asp-route-brand="Puma">Puma</a>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">Hỗ trợ</div>
+            <a href="#">Chính sách đổi trả</a>
+            <a href="#">Hướng dẫn chọn size</a>
+            <a href="#">Vận chuyển</a>
+            <a href="#">Liên hệ</a>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">Tài khoản</div>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Account" asp-action="Profile">Hồ sơ của tôi</a>
+                <a asp-controller="Order" asp-action="History">Đơn hàng</a>
+                <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                <a asp-controller="Account" asp-action="Register">Đăng ký</a>
+            }
+        </div>
+    </div>
+    <div class="footer-bottom" style="max-width:1200px;margin:0 auto">
+        <span>© @DateTime.Now.Year LydShop. All rights reserved.</span>
+        <span>Hotline: 1800 xxxx</span>
+    </div>
+</footer>
+
+<!-- ── TOASTS ── -->
+<div class="toast-stack">
+    @if (TempData["Success"] != null)
+    {
+        <div class="lyd-toast success">
+            <i class="fas fa-circle-check" style="color:#22c55e"></i>
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="lyd-toast error">
+            <i class="fas fa-circle-exclamation" style="color:#ef4444"></i>
+            @TempData["Error"]
+        </div>
+    }
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Cart badge
+    fetch('/Cart/Count')
+        .then(r => r.json())
+        .then(n => {
+            const el = document.getElementById('cartCount');
+            if (el) el.textContent = n || '0';
+        }).catch(() => {});
+
+    // Auto-hide toasts
+    document.querySelectorAll('.lyd-toast').forEach(el => {
+        setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; }, 3500);
+        setTimeout(() => el.remove(), 4000);
+    });
+
+    // User dropdown toggle
+    function toggleUserMenu() {
+        document.getElementById('userMenu').classList.toggle('show');
+    }
+
+    // Đóng khi click ngoài
+    document.addEventListener('click', function(e) {
+        const dd = document.getElementById('userDropdown');
+        if (dd && !dd.contains(e.target)) {
+            document.getElementById('userMenu')?.classList.remove('show');
+        }
+    });
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,50 @@
+@model LydShop.Models.Category
+@{
+    ViewData["Title"] = "Xóa danh mục " + Model.Name;
+}
+
+<div class="container py-4 animate-fade-in" style="max-width: 600px;">
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-600">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-lg glass-card p-4 text-center">
+        <div class="card-body">
+            <div class="mb-4">
+                <i class="fas fa-exclamation-triangle fa-4x text-danger animate-pulse"></i>
+            </div>
+            
+            <h3 class="fw-800 text-light-dark mb-1">Xác Nhận Xóa Danh Mục</h3>
+            <p class="text-danger fw-600 mb-4 fs-6">Hành động này không thể hoàn tác!</p>
+
+            <div class="alert alert-warning border-0 rounded-3 text-start p-3 fs-7 mb-4 bg-opacity-25" role="alert">
+                <div class="mb-2"><strong>Tên danh mục:</strong> <span class="text-dark">@Model.Name</span></div>
+                <div class="mb-2"><strong>Đường dẫn (Slug):</strong> <span class="text-muted">@Model.Slug</span></div>
+                <div><strong>Số lượng sản phẩm thuộc danh mục:</strong> <span class="badge bg-danger">@Model.Products.Count</span></div>
+                
+                @if (Model.Products.Count > 0)
+                {
+                    <div class="text-danger fw-700 mt-2">
+                        <i class="fas fa-exclamation-circle me-1"></i> Chú ý: Danh mục này đang chứa sản phẩm. Xóa danh mục này có thể gây lỗi liên kết sản phẩm hoặc xóa hàng loạt.
+                    </div>
+                }
+            </div>
+
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-danger px-4 py-2.5 rounded-pill fw-600 shadow-sm-danger btn-hover-scale">
+                        <i class="fas fa-trash-alt me-2"></i>Xóa Ngay
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2.5 rounded-pill fw-600 btn-hover-scale">
+                        Hủy bỏ
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

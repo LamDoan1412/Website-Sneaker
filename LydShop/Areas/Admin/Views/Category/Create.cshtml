@@ -1,0 +1,53 @@
+@model LydShop.Models.Category
+@{
+    ViewData["Title"] = "Thêm danh mục";
+}
+
+<div class="container py-4 animate-fade-in" style="max-width: 700px;">
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-600">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 rounded-4 glass-card">
+        <div class="card-body">
+            <h3 class="fw-800 text-light-dark mb-1">Thêm Danh Mục Mới</h3>
+            <p class="text-muted mb-4">Nhập thông tin chi tiết của danh mục mới</p>
+
+            <form asp-action="Create" method="post" class="needs-validation">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 glass-alert rounded-3 mb-3" role="alert"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label text-muted fw-600 fs-7">Tên danh mục</label>
+                    <input asp-for="Name" class="form-control bg-light border-0 py-3 shadow-none text-dark" placeholder="Nhập tên danh mục (ví dụ: Giày Thể Thao)" required />
+                    <span asp-validation-for="Name" class="text-danger fs-7 mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Slug" class="form-label text-muted fw-600 fs-7">Đường dẫn thân thiện (Slug - Tự động tạo nếu để trống)</label>
+                    <input asp-for="Slug" class="form-control bg-light border-0 py-3 shadow-none text-dark" placeholder="giay-the-thao" />
+                    <span asp-validation-for="Slug" class="text-danger fs-7 mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <div class="form-check form-switch py-2">
+                        <input asp-for="IsActive" class="form-check-input accent-primary" type="checkbox" checked />
+                        <label asp-for="IsActive" class="form-check-label text-muted fw-600 fs-7 ms-2">Kích hoạt danh mục này</label>
+                    </div>
+                    <span asp-validation-for="IsActive" class="text-danger fs-7 mt-1 d-block"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-600 shadow-sm-primary btn-hover-scale">
+                    Lưu danh mục <i class="fas fa-save ms-2"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
